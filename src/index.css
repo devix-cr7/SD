@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-base: #09090b;
+  --color-panel: #101013;
+  --color-elevated: #17171b;
+  --color-elevated-2: #1e1e23;
+  --color-border: #232328;
+  --color-border-soft: #1a1a1f;
+
+  --color-text-primary: #edeef1;
+  --color-text-secondary: #9a9aa5;
+  --color-text-tertiary: #5f5f68;
+
+  --color-accent: #6c8eff;
+  --color-accent-soft: #6c8eff1a;
+  --color-accent-2: #35d0ba;
+  --color-accent-2-soft: #35d0ba1a;
+  --color-amber: #f5a623;
+  --color-rose: #f0577a;
+}
+
+@layer base {
+  * { border-color: var(--color-border); }
+  html { color-scheme: dark; }
+  body {
+    @apply bg-base text-text-primary antialiased;
+    font-family: var(--font-display);
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--color-accent-soft); color: var(--color-accent); }
+}
+
+@layer utilities {
+  .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background: var(--color-elevated-2); border-radius: 999px; }
+  .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+  .glass {
+    background: color-mix(in srgb, var(--color-panel) 72%, transparent);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+  }
+  .grain {
+    background-image: radial-gradient(color-mix(in srgb, white 4%, transparent) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+  .focus-ring {
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-base;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
