@@ -1,4 +1,4 @@
-# Full Stack Architect
+ # Full Stack Architect
 
 A premium, Linear/Raycast-inspired workspace for architecting a software project
 before writing a single line of code: data models, API contracts, system
