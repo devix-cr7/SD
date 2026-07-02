@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Database, Plug, Network, ArrowUpRight, Plus } from "lucide-react";
 import { Card, Button, Badge, SectionHeading } from "../components/ui/Primitives";
 import { useWorkspace } from "../store/workspace";
+import { useT } from "../i18n";
 
 const NODES = [
   { x: 60, y: 40 }, { x: 220, y: 20 }, { x: 380, y: 60 }, { x: 500, y: 30 },
@@ -48,11 +49,12 @@ function AmbientGraph() {
 
 export function Dashboard() {
   const { projects, tables, endpoints, openTab } = useWorkspace();
+  const t = useT();
 
   const stats = [
-    { label: "Active projects", value: projects.length, icon: Network, tone: "accent" as const },
-    { label: "Tables designed", value: tables.length, icon: Database, tone: "teal" as const },
-    { label: "Endpoints mapped", value: endpoints.length, icon: Plug, tone: "amber" as const },
+    { label: t("dash_activeProjects"), value: projects.length, icon: Network, tone: "accent" as const },
+    { label: t("dash_tablesDesigned"), value: tables.length, icon: Database, tone: "teal" as const },
+    { label: t("dash_endpointsMapped"), value: endpoints.length, icon: Plug, tone: "amber" as const },
   ];
 
   return (
@@ -66,26 +68,26 @@ export function Dashboard() {
         <AmbientGraph />
         <div className="relative">
           <div className="mb-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent">
-            Architecture, before a single line of code
+            {t("dash_eyebrow")}
           </div>
           <h1 className="max-w-xl text-2xl font-semibold tracking-tight text-text-primary">
-            Plan the whole system, then build it once, correctly.
+            {t("dash_title")}
           </h1>
           <p className="mt-2 max-w-md text-sm text-text-secondary">
-            Model your data, your endpoints, and your infrastructure together — every tool stays in sync.
+            {t("dash_desc")}
           </p>
           <div className="mt-5 flex gap-2.5">
-            <Button variant="primary" onClick={() => openTab({ id: "planner", label: "Project Planner" })}>
-              <Plus size={15} /> New project
+            <Button variant="primary" onClick={() => openTab({ id: "planner", label: t("planner") })}>
+              <Plus size={15} /> {t("dash_newProject")}
             </Button>
-            <Button variant="outline" onClick={() => openTab({ id: "architecture", label: "System Architecture" })}>
-              View architecture
+            <Button variant="outline" onClick={() => openTab({ id: "architecture", label: t("architecture") })}>
+              {t("dash_viewArch")}
             </Button>
           </div>
         </div>
       </motion.div>
 
-      <SectionHeading eyebrow="Overview" title="Your workspace" description="A snapshot of everything in motion." />
+      <SectionHeading eyebrow={t("dash_workspaceEyebrow")} title={t("dash_workspaceTitle")} description={t("dash_workspaceDesc")} />
 
       <div className="mb-8 grid grid-cols-3 gap-4">
         {stats.map((s, i) => (
@@ -104,7 +106,7 @@ export function Dashboard() {
         ))}
       </div>
 
-      <SectionHeading title="Recent projects" />
+      <SectionHeading title={t("dash_recentProjects")} />
       <div className="grid grid-cols-3 gap-4">
         {projects.map((p, i) => (
           <Card
@@ -113,7 +115,7 @@ export function Dashboard() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: i * 0.06 }}
             className="group cursor-pointer"
-            onClick={() => openTab({ id: "database", label: "Database Designer" })}
+            onClick={() => openTab({ id: "database", label: t("database") })}
           >
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-2">
@@ -124,9 +126,9 @@ export function Dashboard() {
             </div>
             <div className="mt-1 text-xs text-text-secondary">{p.type}</div>
             <div className="mt-4 flex items-center gap-4 font-mono text-[11px] text-text-tertiary">
-              <span>{p.tables} tables</span>
-              <span>{p.endpoints} endpoints</span>
-              <span className="ml-auto">{p.updatedAt}</span>
+              <span>{p.tables} {t("tables")}</span>
+              <span>{p.endpoints} {t("endpoints")}</span>
+              <span className="ms-auto">{p.updatedAt}</span>
             </div>
           </Card>
         ))}

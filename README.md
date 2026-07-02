@@ -5,6 +5,8 @@ before writing a single line of code: data models, API contracts, system
 architecture, UI screens, folder scaffolding and docs — all in one desktop-like
 workspace with tabs. 100% client-side, no backend, no API keys, nothing to pay for.
 
+Includes a full English ⇄ Arabic (RTL) language toggle in the top bar.
+
 ## Stack
 React 19 · TypeScript · Vite · Tailwind CSS v4 · Framer Motion · Zustand
 (persisted to localStorage) · React Flow · JSZip · file-saver · Lucide Icons
@@ -25,6 +27,11 @@ npm run build
 npm run preview
 ```
 
+## Deploying to GitHub Pages
+This repo includes `.github/workflows/deploy.yml`. In your repo on GitHub:
+**Settings → Pages → Source → GitHub Actions**. Every push to `main` rebuilds
+and redeploys automatically.
+
 ## What's included
 - Dashboard — live stats, recent projects, animated system-graph hero
 - Project Planner — scope a new project, pick type & accent color
@@ -35,6 +42,7 @@ npm run preview
 - UI Builder — block out screens + live wireframe preview of each screen
 - Folder Structure — generates a **real downloadable ZIP** scaffold for 4 stacks
 - Documentation — live-generated README from your schema/endpoints, real file download
+- English ⇄ Arabic (RTL) toggle, top-right of the app
 - Everything persists automatically to localStorage — refresh and it's still there
 - Command palette (Cmd/Ctrl+K), multi-tab workspace, collapsible sidebar,
   project switcher, status bar

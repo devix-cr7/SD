@@ -3,10 +3,12 @@ import { Copy, FileText, Download } from "lucide-react";
 import { Card, SectionHeading } from "../components/ui/Primitives";
 import { useWorkspace } from "../store/workspace";
 import { downloadTextFile } from "../lib/download";
+import { useT } from "../i18n";
 
 export function Documentation() {
   const { projects, activeProjectId, tables, endpoints } = useWorkspace();
   const project = projects.find((p) => p.id === activeProjectId) ?? projects[0];
+  const t = useT();
   const [copied, setCopied] = useState(false);
 
   const readme = useMemo(() => {
@@ -39,9 +41,9 @@ Proprietary — all rights reserved.
   return (
     <div>
       <SectionHeading
-        eyebrow="Documentation"
-        title="README & API docs"
-        description="Generated live from your schema and endpoints — copy it straight into the repo."
+        eyebrow={t("doc_eyebrow")}
+        title={t("doc_title")}
+        description={t("doc_desc")}
       />
 
       <Card hover={false} className="p-0 overflow-hidden">
@@ -58,7 +60,7 @@ Proprietary — all rights reserved.
               }}
               className="focus-ring rounded p-1 text-text-tertiary hover:text-text-primary"
             >
-              {copied ? <span className="text-[10px] text-accent-2">Copied</span> : <Copy size={13} />}
+              {copied ? <span className="text-[10px] text-accent-2">{t("db_copied")}</span> : <Copy size={13} />}
             </button>
             <button
               onClick={() => downloadTextFile("README.md", readme, "text/markdown")}

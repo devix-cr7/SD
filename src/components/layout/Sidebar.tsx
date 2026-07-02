@@ -6,15 +6,21 @@ import {
 } from "lucide-react";
 import { NAV_ITEMS, GROUPS } from "../../data/nav";
 import { useWorkspace } from "../../store/workspace";
+import { useT } from "../../i18n";
 import clsx from "clsx";
 
 const ICONS: Record<string, React.ElementType> = {
   LayoutGrid, Compass, Database, Plug, LayoutTemplate, Network, Waypoints, FolderTree, FileText,
 };
 
+const GROUP_KEY: Record<string, string> = {
+  Overview: "nav_overview", Design: "nav_design", Architecture: "nav_architecture", Output: "nav_output",
+};
+
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
-  const { activeTab, openTab } = useWorkspace();
+  const { activeTab, openTab, locale } = useWorkspace();
+  const t = useT();
 
   return (
     <motion.aside
@@ -33,7 +39,7 @@ export function Sidebar() {
             transition={{ delay: 0.1 }}
             className="truncate text-[13px] font-semibold tracking-tight text-text-primary"
           >
-            Full Stack Architect
+            {t("appName")}
           </motion.span>
         )}
       </div>
@@ -43,18 +49,19 @@ export function Sidebar() {
           <div key={group}>
             {!collapsed && (
               <div className="mb-1.5 px-2 font-mono text-[10px] uppercase tracking-[0.14em] text-text-tertiary">
-                {group}
+                {t(GROUP_KEY[group] as any)}
               </div>
             )}
             <div className="space-y-0.5">
               {NAV_ITEMS.filter((i) => i.group === group).map((item) => {
                 const Icon = ICONS[item.icon];
                 const active = activeTab === item.id;
+                const label = t(item.id as any);
                 return (
                   <button
                     key={item.id}
-                    onClick={() => openTab({ id: item.id, label: item.label })}
-                    title={collapsed ? item.label : undefined}
+                    onClick={() => openTab({ id: item.id, label })}
+                    title={collapsed ? label : undefined}
                     className={clsx(
                       "focus-ring group relative flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] transition-colors duration-150",
                       active
@@ -65,12 +72,15 @@ export function Sidebar() {
                     {active && (
                       <motion.div
                         layoutId="sidebar-active"
-                        className="absolute left-0 top-1 bottom-1 w-[2.5px] rounded-full bg-accent"
+                        className={clsx(
+                          "absolute top-1 bottom-1 w-[2.5px] rounded-full bg-accent",
+                          locale === "ar" ? "right-0" : "left-0"
+                        )}
                         transition={{ type: "spring", stiffness: 400, damping: 32 }}
                       />
                     )}
                     <Icon size={16} strokeWidth={2} className="shrink-0" />
-                    {!collapsed && <span className="truncate">{item.label}</span>}
+                    {!collapsed && <span className="truncate">{label}</span>}
                   </button>
                 );
               })}
@@ -84,22 +94,24 @@ export function Sidebar() {
           href="https://t.me/SF8_9"
           target="_blank"
           rel="noreferrer"
-          className={clsx(
-            "focus-ring flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] text-text-secondary transition-colors duration-150 hover:bg-elevated/70 hover:text-accent-2"
-          )}
+          className="focus-ring flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] text-text-secondary transition-colors duration-150 hover:bg-elevated/70 hover:text-accent-2"
           title="Contact on Telegram"
         >
           <Send size={16} strokeWidth={2} className="shrink-0" />
-          {!collapsed && <span className="truncate">t.me/SF8_9</span>}
+          {!collapsed && <span className="truncate font-mono" dir="ltr">{t("contactTelegram")}</span>}
         </a>
         <button
           onClick={() => setCollapsed((c) => !c)}
           className="focus-ring mt-1 flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-[13px] text-text-secondary transition-colors duration-150 hover:bg-elevated/70 hover:text-text-primary"
         >
-          <motion.span animate={{ rotate: collapsed ? 180 : 0 }} transition={{ duration: 0.25 }} className="flex">
-            <ChevronsLeft size={16} strokeWidth={2} />
+          <motion.span
+            animate={{ rotate: collapsed ? 180 : 0 }}
+            transition={{ duration: 0.25 }}
+            className="flex"
+          >
+            <ChevronsLeft size={16} strokeWidth={2} className={locale === "ar" ? "-scale-x-100" : ""} />
           </motion.span>
-          {!collapsed && <span>Collapse</span>}
+          {!collapsed && <span>{t("collapse")}</span>}
         </button>
       </div>
     </motion.aside>

@@ -28,6 +28,9 @@ interface WorkspaceState {
 
   commandPaletteOpen: boolean;
   setCommandPaletteOpen: (v: boolean) => void;
+
+  locale: "en" | "ar";
+  toggleLocale: () => void;
 }
 
 const TAB_LABELS: Record<ToolId, string> = {
@@ -117,6 +120,9 @@ export const useWorkspace = create<WorkspaceState>()(
 
       commandPaletteOpen: false,
       setCommandPaletteOpen: (v) => set({ commandPaletteOpen: v }),
+
+      locale: "en",
+      toggleLocale: () => set({ locale: get().locale === "en" ? "ar" : "en" }),
     }),
     {
       name: "fsa-workspace-v1",
@@ -127,6 +133,7 @@ export const useWorkspace = create<WorkspaceState>()(
         endpoints: state.endpoints,
         tabs: state.tabs,
         activeTab: state.activeTab,
+        locale: state.locale,
       }),
     }
   )

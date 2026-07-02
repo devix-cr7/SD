@@ -4,6 +4,7 @@ import { Plus, Trash2, KeyRound, Link2, Download, Copy } from "lucide-react";
 import { Card, Button, SectionHeading, Badge } from "../components/ui/Primitives";
 import { useWorkspace } from "../store/workspace";
 import { downloadTextFile } from "../lib/download";
+import { useT } from "../i18n";
 import type { Column } from "../types";
 
 function genId() {
@@ -51,6 +52,7 @@ const COLUMN_TYPES = ["uuid", "varchar(255)", "text", "int", "numeric(10,2)", "b
 
 export function DatabaseDesigner() {
   const { tables, addTable, updateTable, removeTable } = useWorkspace();
+  const t = useT();
   const [exportMode, setExportMode] = useState<"sql" | "prisma">("sql");
   const [copied, setCopied] = useState(false);
 
@@ -92,12 +94,12 @@ export function DatabaseDesigner() {
   return (
     <div>
       <SectionHeading
-        eyebrow="Database Designer"
-        title="Model your schema"
-        description="Tables, columns and relationships — exported to SQL or Prisma on demand."
+        eyebrow={t("db_eyebrow")}
+        title={t("db_title")}
+        description={t("db_desc")}
         action={
           <Button variant="primary" onClick={handleAddTable}>
-            <Plus size={15} /> New table
+            <Plus size={15} /> {t("db_newTable")}
           </Button>
         }
       />
@@ -122,7 +124,7 @@ export function DatabaseDesigner() {
                       className="focus-ring rounded bg-transparent font-mono text-sm font-medium text-accent-2"
                     />
                     <div className="flex items-center gap-1.5">
-                      <Badge>{table.columns.length} cols</Badge>
+                      <Badge>{table.columns.length} {t("db_cols")}</Badge>
                       <button
                         onClick={() => removeTable(table.id)}
                         className="focus-ring rounded p-1.5 text-text-tertiary transition-colors duration-150 hover:bg-rose/10 hover:text-rose"
@@ -175,7 +177,7 @@ export function DatabaseDesigner() {
                     onClick={() => handleAddColumn(table.id)}
                     className="focus-ring flex w-full items-center gap-1.5 px-4 py-2 text-xs text-text-tertiary transition-colors duration-150 hover:bg-elevated/40 hover:text-text-secondary"
                   >
-                    <Plus size={12} /> Add column
+                    <Plus size={12} /> {t("db_addColumn")}
                   </button>
                 </Card>
               </motion.div>
@@ -207,7 +209,7 @@ export function DatabaseDesigner() {
                 }}
                 className="focus-ring rounded p-1.5 text-text-tertiary transition-colors duration-150 hover:bg-elevated/60 hover:text-text-primary"
               >
-                {copied ? <span className="text-[10px] text-accent-2">Copied</span> : <Copy size={13} />}
+                {copied ? <span className="text-[10px] text-accent-2">{t("db_copied")}</span> : <Copy size={13} />}
               </button>
               <button
                 onClick={() =>

@@ -2,10 +2,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import { useWorkspace } from "../../store/workspace";
+import { useT } from "../../i18n";
 import { NAV_ITEMS } from "../../data/nav";
 
 export function CommandPalette() {
   const { commandPaletteOpen, setCommandPaletteOpen, openTab } = useWorkspace();
+  const t = useT();
   const [query, setQuery] = useState("");
 
   useEffect(() => {
@@ -20,14 +22,19 @@ export function CommandPalette() {
     return () => window.removeEventListener("keydown", handler);
   }, [setCommandPaletteOpen]);
 
+  const items = useMemo(
+    () => NAV_ITEMS.map((i) => ({ id: i.id, label: t(i.id as any), hint: t(`hint_${i.id}` as any) })),
+    [t]
+  );
+
   const results = useMemo(
     () =>
-      NAV_ITEMS.filter(
+      items.filter(
         (i) =>
           i.label.toLowerCase().includes(query.toLowerCase()) ||
           i.hint.toLowerCase().includes(query.toLowerCase())
       ),
-    [query]
+    [items, query]
   );
 
   return (
@@ -55,7 +62,7 @@ export function CommandPalette() {
                 autoFocus
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Jump to a tool…"
+                placeholder={t("jumpPlaceholder")}
                 className="focus-ring flex-1 bg-transparent text-sm text-text-primary placeholder:text-text-tertiary"
               />
               <kbd className="rounded border border-border px-1.5 py-0.5 font-mono text-[10px] text-text-tertiary">
@@ -71,14 +78,14 @@ export function CommandPalette() {
                     setCommandPaletteOpen(false);
                     setQuery("");
                   }}
-                  className="flex w-full flex-col items-start rounded-lg px-3 py-2 text-left transition-colors duration-150 hover:bg-elevated/70"
+                  className="flex w-full flex-col items-start rounded-lg px-3 py-2 text-start transition-colors duration-150 hover:bg-elevated/70"
                 >
                   <span className="text-sm text-text-primary">{item.label}</span>
                   <span className="text-xs text-text-tertiary">{item.hint}</span>
                 </button>
               ))}
               {results.length === 0 && (
-                <div className="px-3 py-6 text-center text-sm text-text-tertiary">No matches</div>
+                <div className="px-3 py-6 text-center text-sm text-text-tertiary">{t("noMatches")}</div>
               )}
             </div>
           </motion.div>

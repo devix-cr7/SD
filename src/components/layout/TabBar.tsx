@@ -1,10 +1,12 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
 import { useWorkspace } from "../../store/workspace";
+import { useT } from "../../i18n";
 import clsx from "clsx";
 
 export function TabBar() {
   const { tabs, activeTab, setActiveTab, closeTab } = useWorkspace();
+  const t = useT();
 
   return (
     <div className="scrollbar-thin flex h-10 shrink-0 items-center gap-1 overflow-x-auto border-b border-border bg-base/60 px-2">
@@ -27,7 +29,7 @@ export function TabBar() {
                   : "text-text-secondary hover:bg-elevated/50 hover:text-text-primary"
               )}
             >
-              <span className="whitespace-nowrap">{tab.label}</span>
+              <span className="whitespace-nowrap">{t(tab.id as any)}</span>
               {tab.id !== "dashboard" && (
                 <span
                   onClick={(e) => {

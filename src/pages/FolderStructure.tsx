@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Copy, FolderTree, Download, Loader2 } from "lucide-react";
 import { Card, Button, SectionHeading } from "../components/ui/Primitives";
 import { useWorkspace } from "../store/workspace";
+import { useT } from "../i18n";
 
 const STACKS = ["Next.js (App Router)", "React + Vite", "Node/Express API", "NestJS API"] as const;
 type Stack = (typeof STACKS)[number];
@@ -110,6 +111,7 @@ function buildPaths(stack: Stack, tableNames: string[]): { path: string; content
 
 export function FolderStructure() {
   const { tables } = useWorkspace();
+  const t = useT();
   const [stack, setStack] = useState<Stack>("Next.js (App Router)");
   const [copied, setCopied] = useState(false);
   const [zipping, setZipping] = useState(false);
@@ -137,13 +139,13 @@ export function FolderStructure() {
   return (
     <div>
       <SectionHeading
-        eyebrow="Folder Structure"
-        title="Generate a project scaffold"
-        description="Pick a stack — the structure reflects the schema you've already designed."
+        eyebrow={t("folder_eyebrow")}
+        title={t("folder_title")}
+        description={t("folder_desc")}
         action={
           <Button variant="primary" onClick={handleDownloadZip} disabled={zipping}>
             {zipping ? <Loader2 size={15} className="animate-spin" /> : <Download size={15} />}
-            {zipping ? "Zipping…" : "Download ZIP"}
+            {zipping ? t("folder_zipping") : t("folder_download")}
           </Button>
         }
       />
@@ -169,7 +171,7 @@ export function FolderStructure() {
             }}
             className="focus-ring rounded p-1 text-text-tertiary hover:text-text-primary"
           >
-            {copied ? <span className="text-[10px] text-accent-2">Copied</span> : <Copy size={13} />}
+            {copied ? <span className="text-[10px] text-accent-2">{t("db_copied")}</span> : <Copy size={13} />}
           </button>
         </div>
         <pre className="p-5 font-mono text-[12.5px] leading-relaxed text-text-secondary">{tree}</pre>

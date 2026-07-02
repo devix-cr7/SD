@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, LayoutTemplate, Trash2, Eye, EyeOff } from "lucide-react";
 import { Card, Button, Input, SectionHeading, Badge } from "../components/ui/Primitives";
+import { useT } from "../i18n";
 
 interface Screen {
   id: string;
@@ -29,7 +30,7 @@ const SHAPE: Record<string, { h: string; w?: string; label?: string }> = {
   BillingCard: { h: "h-14", w: "w-2/3" },
 };
 
-function Wireframe({ components }: { components: string[] }) {
+function Wireframe({ components, emptyLabel }: { components: string[]; emptyLabel: string }) {
   const hasSidebar = components.includes("Sidebar");
   const rest = components.filter((c) => c !== "Sidebar");
   return (
@@ -40,7 +41,7 @@ function Wireframe({ components }: { components: string[] }) {
       <div className="flex flex-1 flex-col gap-1.5">
         {rest.length === 0 && (
           <div className="flex flex-1 items-center justify-center text-[10px] text-text-tertiary">
-            empty screen
+            {emptyLabel}
           </div>
         )}
         {rest.map((c, i) => {
@@ -63,6 +64,7 @@ function Wireframe({ components }: { components: string[] }) {
 }
 
 export function UiBuilder() {
+  const t = useT();
   const [screens, setScreens] = useState(STARTER);
   const [name, setName] = useState("");
   const [preview, setPreview] = useState<Record<string, boolean>>({ sc1: true, sc2: true, sc3: true });
@@ -82,14 +84,14 @@ export function UiBuilder() {
   return (
     <div>
       <SectionHeading
-        eyebrow="UI Builder"
-        title="Sketch your screens"
-        description="Block out screens and the components each one needs — with a live wireframe preview."
+        eyebrow={t("ui_eyebrow")}
+        title={t("ui_title")}
+        description={t("ui_desc")}
       />
 
       <div className="mb-5 flex gap-2">
-        <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="New screen name" onKeyDown={(e) => e.key === "Enter" && addScreen()} />
-        <Button variant="primary" onClick={addScreen}><Plus size={15} /> Add screen</Button>
+        <Input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("ui_screenPlaceholder")} onKeyDown={(e) => e.key === "Enter" && addScreen()} />
+        <Button variant="primary" onClick={addScreen}><Plus size={15} /> {t("ui_addScreen")}</Button>
       </div>
 
       <div className="grid grid-cols-3 gap-4">
@@ -120,7 +122,7 @@ export function UiBuilder() {
 
                 {preview[s.id] && (
                   <div className="p-3">
-                    <Wireframe components={s.components} />
+                    <Wireframe components={s.components} emptyLabel={t("ui_emptyScreen")} />
                   </div>
                 )}
 
@@ -128,11 +130,11 @@ export function UiBuilder() {
                   {s.components.map((c) => (
                     <Badge key={c} tone="accent">{c}</Badge>
                   ))}
-                  {s.components.length === 0 && <span className="text-xs text-text-tertiary">No components yet</span>}
+                  {s.components.length === 0 && <span className="text-xs text-text-tertiary">{t("ui_noComponents")}</span>}
                 </div>
                 <div className="border-t border-border p-2">
                   <input
-                    placeholder="+ component name, Enter"
+                    placeholder={t("ui_componentPlaceholder")}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" && e.currentTarget.value.trim()) {
                         addComponent(s.id, e.currentTarget.value.trim());

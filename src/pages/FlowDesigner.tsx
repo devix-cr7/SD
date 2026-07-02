@@ -6,6 +6,7 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 import { Plus } from "lucide-react";
 import { Button, SectionHeading, Card } from "../components/ui/Primitives";
+import { useT } from "../i18n";
 
 function step(id: string, label: string, x: number, y: number): Node {
   return {
@@ -36,6 +37,7 @@ const initialEdges = [
 ];
 
 export function FlowDesigner() {
+  const t = useT();
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [counter, setCounter] = useState(1);
@@ -54,10 +56,10 @@ export function FlowDesigner() {
   return (
     <div>
       <SectionHeading
-        eyebrow="Flow Designer"
-        title="Design a user or system flow"
-        description="Sequence the steps, branch where behavior diverges."
-        action={<Button variant="primary" size="sm" onClick={addStep}><Plus size={13} /> Add step</Button>}
+        eyebrow={t("flow_eyebrow")}
+        title={t("flow_title")}
+        description={t("flow_desc")}
+        action={<Button variant="primary" size="sm" onClick={addStep}><Plus size={13} /> {t("flow_addStep")}</Button>}
       />
       <Card hover={false} className="h-[560px] overflow-hidden p-0">
         <ReactFlow

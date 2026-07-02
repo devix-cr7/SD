@@ -6,6 +6,7 @@ import ReactFlow, {
 import "reactflow/dist/style.css";
 import { Plus } from "lucide-react";
 import { Button, SectionHeading, Card } from "../components/ui/Primitives";
+import { useT } from "../i18n";
 
 const LAYER_COLOR: Record<string, string> = {
   frontend: "#6c8eff", backend: "#35d0ba", database: "#f5a623",
@@ -51,16 +52,16 @@ const initialEdges = [
   { id: "e7", source: "backend", target: "storage", style: { stroke: "#a78bfa" } },
 ];
 
-const PALETTE = [
-  { kind: "frontend", label: "Frontend" },
-  { kind: "backend", label: "Service" },
-  { kind: "database", label: "Database" },
-  { kind: "cache", label: "Cache" },
-  { kind: "storage", label: "Storage" },
-  { kind: "queue", label: "Queue" },
-];
-
 export function SystemArchitecture() {
+  const t = useT();
+  const PALETTE = [
+    { kind: "frontend", label: t("arch_frontend") },
+    { kind: "backend", label: t("arch_service") },
+    { kind: "database", label: t("arch_database") },
+    { kind: "cache", label: t("arch_cache") },
+    { kind: "storage", label: t("arch_storage") },
+    { kind: "queue", label: t("arch_queue") },
+  ];
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [counter, setCounter] = useState(1);
@@ -80,9 +81,9 @@ export function SystemArchitecture() {
   return (
     <div>
       <SectionHeading
-        eyebrow="System Architecture"
-        title="Map the full system"
-        description="Drag from the palette, connect nodes, and see how every layer talks to the next."
+        eyebrow={t("arch_eyebrow")}
+        title={t("arch_title")}
+        description={t("arch_desc")}
       />
 
       <div className="mb-4 flex flex-wrap gap-2">
